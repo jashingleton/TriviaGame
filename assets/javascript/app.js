@@ -1,6 +1,5 @@
-$(document).ready( function() {
 
-var questions = [
+var triviaQuestions = [
 	{
 		question: "This Japanese dessert is made from sticky rice and ice cream, and comes in balls.",
 		choices: ["mochi", "anpan", "chinsuko", "anmitsu"],
@@ -52,13 +51,54 @@ var questions = [
 		correctAnswer: 0,
 	}];
 
-	var correct = 0; //correct answers
-	var incorrect = 0; //incorrect answers
-	var unanswered = 0; //timed out questions
+
+	var intervalId;
+	var correct = 0;
+	var incorrect = 0;
+	var unanswered = 0;
+	number = 120;
+
+
+//click start button, hide start button, start timer, show questions
+	$(document).ready(function() {
+		$("#done").hide();
+		$("#start").on("click", run);
+	})
+
+	function run() {
+	  $("#start").hide();
+      clearInterval(intervalId);
+      intervalId = setInterval(decrement, 1000);
+      displayQuestions;
+    }
+
+	function displayQuestions() {
+		$("#questions").html("<h2>" + questions.question);
+	}
 
 
 
-//click start to display questions and start timer
+    function decrement() {
+    	number--;
+    	$("#timerDisplay").html("<h2>" + "Time Remaining: " + number + " seconds" + "</h2>");
 
+    	if (number === 0) {
+    		stop();
+    		alert ("Sorry, Time's Up!");
+    	}
+    }
 
-}
+    function stop() {
+    	clearInterval(intervalId);	
+    	$("#winLose").html("<h2>" + "Correct Answers: " + correct + "</h2>" + "<h2>" + "Incorrect Answers: " + incorrect + "</h2>" + "<h2>" + "Questions Unanswered: " + unanswered + "</h2>");
+    }
+
+    function restart() {
+		var correct = 0;
+		var incorrect = 0;
+		var unanswered = 0; 
+		displayQuestions();
+	}
+
+$("#done").on("click", stop);
+	
